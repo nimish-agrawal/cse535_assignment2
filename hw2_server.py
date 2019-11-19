@@ -10,7 +10,7 @@ import pickle
 import json
 
 app = Flask(__name__)
-actions = {'buy': 1, 'communicate':2, 'fun': 3, 'hope': 4, 'mother':5,'really':6}
+actions = {"buy": 1, "communicate":2, "fun": 3, "hope": 4, "mother":5,"really":6}
 
 
 
@@ -125,6 +125,7 @@ def main():
               "3" : label_nn,
               "4" : label_svm} 
     print(result)
+    result = json.dumps(result)
     return str(result)
 
 
@@ -138,8 +139,11 @@ def mainJson():
         test_x = convert_to_csv(content)
         print(test_x)
         test_x = test_x.drop(test_x.columns[[0]], axis=1)  # Removing the scores from the feature extraction
+        # if (test_x.isnull().values.any()) or (math.isnan(test_x)):
+        #     test_x.fillna(test_x.mean(), inplace=True)
     print("\n\n\n\n")
-    print(test_x)
+    # print(test_x)
+
     df = pd.DataFrame()
     y = pd.DataFrame()
 
@@ -147,17 +151,20 @@ def mainJson():
     train_x = None
     train_y = None
     test_y = None
-    label_lr = logistic_regression(train_x, test_x, train_y, test_y)
-    label_dt = Decision_tree(train_x, test_x, train_y, test_y)
-    label_nn = Neural_Network(train_x, test_x, train_y, test_y)
-    label_svm = SVM(train_x, test_x, train_y, test_y)
+    label_lr = str(logistic_regression(train_x, test_x, train_y, test_y))
+    label_dt = str(Decision_tree(train_x, test_x, train_y, test_y))
+    label_nn = str(Neural_Network(train_x, test_x, train_y, test_y))
+    label_svm = str(SVM(train_x, test_x, train_y, test_y))
     
-    result = {"1" : label_lr, 
+    result = {"1" : label_lr,
               "2" : label_dt, 
               "3" : label_nn,
               "4" : label_svm} 
+    # print(result)
+    # result = str(result).replace("'", "\"")
+    result = json.dumps(result)
     print(result)
-    return result
+    return str(result)
 
 
 
